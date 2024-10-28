@@ -32,7 +32,7 @@ def process_customer_data(input_file, output_file):
 
 def generate_markdown_report(exec_time, mem_usage, total_income, avg_income, total_frequency, avg_frequency, output_file):
     """Generate a Markdown file with performance analysis."""
-    with open("Python_Performance.md", "w") as f:
+    with open("Python_Performance.md", "w", encoding="utf-8") as f:  # Specify encoding
         f.write("# Python Performance Analysis\n\n")
         f.write("## Performance Metrics\n\n")
         f.write(f"- **Execution Time:** {exec_time:.2f} seconds\n")
@@ -42,7 +42,7 @@ def generate_markdown_report(exec_time, mem_usage, total_income, avg_income, tot
         f.write(f"- **Average Annual Income:** {avg_income:.2f}\n")
         f.write(f"- **Total Purchase Frequency:** {total_frequency}\n")
         f.write(f"- **Average Purchase Frequency:** {avg_frequency:.2f}\n\n")
-        f.write(f"## Output\n\n")
+        f.write("## Output\n\n")
         f.write(f"The filtered and transformed data has been saved to `{output_file}`.\n")
 
 def main():
