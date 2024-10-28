@@ -1,31 +1,45 @@
-install:
-	pip install --upgrade pip && pip install -r requirements.txt
+rust-version:
+	@echo "Rust command-line utility versions:"
+	rustc --version 			#rust compiler
+	cargo --version 			#rust package manager
+	rustfmt --version			#rust code formatter
+	rustup --version			#rust toolchain manager
+	clippy-driver --version		#rust linter
 
 format:
-	black *.py
-	
+	cargo fmt --quiet
+
+install:
+	# Install if needed
+	#@echo "Updating rust toolchain"
+	#rustup update stable
+	#rustup default stable 
+
 lint:
-	ruff check *.py
+	cargo clippy --quiet
 
 test:
-	python -m pytest -vv --cov=main --cov=myLib test_*.py	
+	cargo test --quiet
 
-all: install format lint test
+run:
+	cargo run
 
-generate_and_push:
-	# Create the markdown file 
-	python test_main.py  
+release:
+	cargo build --release
 
-	# Add, commit, and push the generated files to GitHub
-	@if [ -n "$$(git status --porcelain)" ]; then \
-		git config --local user.email "action@github.com"; \
-		git config --local user.name "GitHub Action"; \
-		git add .; \
-		git commit -m "Add SQL log as query_log.md"; \
-		git push; \
-	else \
-		echo "No changes to commit. Skipping commit and push."; \
-	fi
+all: format lint test run
+		
+python_install:
+	pip install --upgrade pip && pip install -r requirements.txt
 
-extract:
-	python main.py extract
+python_format:
+	black *.py
+
+python_lint:
+	pylint --disable=R,C --ignore-patterns=test_.*?py *.py
+
+
+python_test:
+	python -m pytest -cov=main test_main.py
+
+python_all: install python_format python_lint python_test

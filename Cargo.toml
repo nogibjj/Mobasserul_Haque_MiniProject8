@@ -1,6 +1,9 @@
 [package]
-name = "Mobasserul_Haque_MiniProject8"
+name = "mobasserul_haque_mini_project8"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+rand = "0.8"  
+sysinfo = "0.26"
+polars = { version = "0.25.0", features = ["lazy", "random"] }

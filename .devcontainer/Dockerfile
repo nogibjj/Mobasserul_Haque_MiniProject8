@@ -1,18 +1,24 @@
-# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/codespaces-linux/.devcontainer/base.Dockerfile
+# Start with a lightweight Python image
+FROM python:3.8-slim
 
-FROM mcr.microsoft.com/vscode/devcontainers/universal:2-focal
+# Install Rust using rustup
+RUN apt-get update && \
+    apt-get install -y curl build-essential && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . "$HOME/.cargo/env" && \
+    rustup default stable
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-RUN apt-get update && apt-get -y install --no-install-recommends \
-   python3.8-venv \
-   gcc 
-   
-ARG USER="codespace"
-ARG VENV_PATH="/home/${USER}/venv"
-COPY requirements.txt /tmp/
-COPY Makefile /tmp/
-RUN su $USER -c "/usr/bin/python3 -m venv /home/${USER}/venv" \
-   && su $USER -c "${VENV_PATH}/bin/pip --disable-pip-version-check --no-cache-dir install -r /tmp/requirements.txt" \
-   && rm -rf /tmp/requirements.txt
+# Set the working directory
+WORKDIR /workspace
+
+# Copy Python and Rust files
+COPY . .
+
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Build the Rust project
+RUN . "$HOME/.cargo/env" && cargo build --release
+
+# Command to run when the container starts, defaults to Python script
+CMD ["python", "scripts/python_script"]
