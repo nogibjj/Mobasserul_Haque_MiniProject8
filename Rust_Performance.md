@@ -1,10 +1,10 @@
 # Rust Performance Analysis
 ## Execution Time
-Execution time: **7.4143ms**
+Execution time: **4.2021ms**
 ## Resource Usage
-Memory Usage: **19.68 MB**
-Initial CPU Usage: **8.80%**
-Final CPU Usage: **3.70%**
+Memory Usage: **19.87 MB**
+Initial CPU Usage: **43.84%**
+Final CPU Usage: **3.31%**
 ## Processed Data Metrics
 - **Total Annual Income:** 7585000.00
 - **Average Annual Income:** 67123.89
