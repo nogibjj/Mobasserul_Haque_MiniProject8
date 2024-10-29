@@ -1,171 +1,280 @@
-[![CI](https://github.com/nogibjj/Mobasserul_Haque_MiniProject5/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Mobasserul_Haque_MiniProject5/actions/workflows/cicd.yml)
+[![CI/CD](https://github.com/nogibjj/Mobasserul_Haque_MiniProject8/actions/workflows/python_cicd.yml/badge.svg)](https://github.com/nogibjj/Mobasserul_Haque_MiniProject8/actions/workflows/python_cicd.yml)
+[![Rust CI/CD Pipeline](https://github.com/nogibjj/Mobasserul_Haque_MiniProject8/actions/workflows/rust_cicd.yml/badge.svg)](https://github.com/nogibjj/Mobasserul_Haque_MiniProject8/actions/workflows/rust_cicd.yml)
 
-# Graduate Employment Salary ETL Query Pipeline using Databricks
 
-This project provides an ETL (Extract, Transform, Load) and querying tool designed to analyze critical employment statistics for both undergraduate and graduate students. The analysis focuses on employment rates, unemployment rates, and salary premiums, leveraging data from the **RecentGradsDB** and **GradStudentsDB** datasets.
+# Performance Comparison: Python vs Rust
 
-The pipeline is built using Python and Databricks, offering users the capability to efficiently extract data from various sources, transform and clean it for analysis, and load it into a Databricks table for further processing. Users can perform complex SQL queries that utilize JOINs, aggregations, filtering, and sorting to gain insights into employment trends, average salaries, and the effectiveness of various degree programs in securing employment for graduates.
+This project compares Python and Rust implementations for processing customer data based on metrics like execution time, memory usage, and CPU utilization. Both scripts follow the same workflow, ensuring the comparison is fair and focuses on language performance rather than differences in implementation.
 
-By utilizing this pipeline, educators, policymakers, and students can better understand the labor market dynamics and the value of different degrees, ultimately aiding in informed decision-making regarding education and career paths.
+# Project Overview
 
-## Features
+## Objective
 
-- **ETL Operations**: 
-  - Extract data from CSV files.
-  - Transform and load data into Databricks tables for analysis.
-  
-- **Data Transformation**: Cleaning and preprocessing of data to ensure consistency and accuracy, including handling missing values and converting data types.
+The primary goal of this project is to:
 
-- **Data Loading**: Efficient loading of transformed data into a Databricks table, enabling scalable querying and analysis.
+1. **Rewrite a Python script for customer data processing in Rust.**
+2. **Compare the performance of both implementations** in terms of:
+   - Execution time
+   - Memory usage
+3. **Provide insights into the performance benefits Rust can offer over Python.**
 
-- **Query Operations**:
-  - Execute complex SQL queries using JOINs, GROUP BY, HAVING, and UNION.
-  - Filter and sort data by employment rates, salary differences, and other attributes.
-  
-- **Logging and Output**:
-  - Query results are outputted in a structured format for easy interpretation.
-  - Errors and exceptions are logged during ETL and querying processes.
+# Features
+
+## 1. Data Processing
+The core functionality of the project involves processing customer data to extract meaningful insights. This includes:
+
+### Filtering Customers:
+- **Purchase Amount > 400**: Selects customers who have spent more than 400 units of currency.
+- **Loyalty Score > 7**: Ensures that only loyal customers (with high loyalty scores) are included.
+
+### Calculations:
+- **Total and Average Annual Income**: Aggregates the total annual income of the filtered customers and calculates their average income.
+- **Total and Average Purchase Frequency**: Computes how often the filtered customers make purchases, both in total and on average.
+
+### Data Transformation:
+- **New Column: `high_value_customer`**: 
+  - Marks customers as "high value" if their `purchase_amount` exceeds 500.
+  - Provides an additional data point for downstream analysis.
+
+---
+
+## 2. Performance Metrics
+To assess and compare the efficiency of the Python and Rust implementations, the project tracks key performance metrics:
+
+### Execution Time:
+- Measures how long it takes for each script to process the dataset, highlighting speed differences between Python and Rust.
+
+### Memory Usage:
+- Tracks memory consumption during script execution, showcasing Rust's memory efficiency.
+
+### CPU Utilization:
+- **Initial CPU Usage**: Captures CPU usage before the script begins execution.
+- **Final CPU Usage**: Captures CPU usage after the script completes.
+
+These metrics provide a comprehensive understanding of resource utilization differences between the implementations.
+
+---
+
+## 3. Performance Reports
+The results of the performance metrics are saved in Markdown reports for easy readability and comparison:
+
+- **Python Performance Report**:
+  - Saved as `Python_Performance.md`.
+  - Includes execution time, memory usage, and data processing metrics for the Python script.
+
+- **Rust Performance Report**:
+  - Saved as `Rust_Performance.md`.
+  - Includes execution time, memory usage, and data processing metrics for the Rust script.
+
+These reports make it easy to evaluate the efficiency of each implementation.
+
+---
+
+## 4. Filtered Data Output
+The filtered and processed customer data is saved to CSV files for further analysis or integration into other systems:
+
+- **Python Output**: Saved as `Python_Filtered_Customers.csv`.
+- **Rust Output**: Saved as `Rust_Filtered_Customers.csv`.
+
+These files contain the filtered dataset with all computed metrics and the additional `high_value_customer` column.
+
+---
+
+By focusing on data filtering, performance metrics, and clear reporting, this project demonstrates how the same task can be handled in Python and Rust. It provides a direct comparison of their capabilities in terms of speed, memory usage, and efficiency. The project also produces reusable datasets and performance reports for future analysis.
 
 ## Directory Structure
 
 ```
-├── .devcontainer/
+## Repository Structure
+
+```plaintext
+.
+├── .devcontainer/                
 │   ├── devcontainer.json
-│   └── Dockerfile
-├── .github/
-│   └── workflows/cicd.yml
-├── data/
-│   ├── grad-students.csv
-    └── recent_grads.csv
-├── myLib/
-│   ├── __init__.py
-│   ├── __pycache__/
-│   ├── extract.py
-│   ├── query.py
-│   └── transform_load.py
-├── .gitignore
-├── main.py
-├── Makefile
-├── query_log.md
-├── README.md  
-├── requirements.txt
-└── test_main.py
-```
-## Usage
-To run the ETL process or execute queries, use the following commands:
-
-### Extract Data
-To extract data from the CSV files, run:
-
-```python
-python main.py extract
-```
-### Load Data
-To transform and load data into the Databricks database, execute:
-```python
-python main.py load
-```
-
-### Load Data
-To transform and load data into the Databricks database, execute:
-```python
-python main.py load
-```
-## Execute SQL Query
-To run a SQL query against the Databricks database, use:
-
-```python
-python main.py query "<your_sql_query>"
-```
-
-## Complex SQL query 1:
-
-```sql
-SELECT 
-    rg.Major, 
-    rg.Major_category, 
-    rg.Total AS Total_Undergrad_Grads, 
-    gs.Grad_total AS Total_Grad_Students, 
-    AVG(rg.Unemployment_rate) AS Avg_Undergrad_Unemployment_Rate, 
-    AVG(gs.Grad_unemployment_rate) AS Avg_Grad_Unemployment_Rate, 
-    AVG(rg.Median) AS Avg_Undergrad_Median_Salary, 
-    AVG(gs.Grad_median) AS Avg_Grad_Median_Salary 
-FROM 
-    RecentGradsDB rg 
-JOIN 
-    GradStudentsDB gs 
-ON 
-    rg.Major_code = gs.Major_code 
-GROUP BY 
-    rg.Major_category, 
-    rg.Major, 
-    rg.Total, 
-    gs.Grad_total 
-HAVING 
-    AVG(rg.Unemployment_rate) < 0.06 
-ORDER BY 
-    rg.Total DESC;
-
-```
-This SQL query joins two tables, RecentGradsDB and GradStudentsDB, and retrieves aggregate information about undergraduate and graduate employment, salary statistics, and unemployment rates for different majors
-
-The query provides a list of majors along with details such as the total number of undergraduate and graduate students, the average unemployment rates, and the average median salaries for both undergraduate and graduate levels. The results are filtered to include only majors where the average undergraduate unemployment rate is below 6%, and the majors are sorted by the total number of undergraduates in descending order
-
-### Expected output:
-
-This output highlights majors with low unemployment rates and the comparison between undergraduate and graduate outcomes
-
-![SQL_query1_output](SQL_query1_output.PNG)
-
-## Complex SQL query 2:
-
-```sql
-
-SELECT Major, 'Undergrad' AS Degree_Level, Total AS Total_Students 
-FROM RecentGradsDB 
-WHERE Total > 5000 
-UNION 
-SELECT Major, 'Graduate' AS Degree_Level, Grad_total AS Total_Students 
-FROM GradStudentsDB 
-WHERE Grad_total > 5000 
-ORDER BY Total_Students DESC;
+│   ├── Dockerfile
+├── .github/workflows/            
+│   ├── python_cicd.yml           
+│   ├── rust_cicd.yml             
+├── data/                         
+│   ├── Customer Purchasing Behaviors.csv
+│   ├── Python_Filtered_Customers.csv
+│   ├── Rust_Filtered_Customers.csv
+├── src/                          
+│   ├── lib.rs                    
+│   ├── main.rs                   
+├── tests/                        
+│   ├── test.rs
+├── .coverage                     
+├── .gitignore                    
+├── Cargo.lock                    
+├── Cargo.toml                    
+├── Makefile                      
+├── Python_Performance.md         
+├── README.md                     
+├── Rust_Performance.md           
+├── main.py                       
+├── requirements.txt              
+├── test_main.py                  
 
 ```
 
-This SQL query combines data from two different tables (`RecentGradsDB` and `GradStudentsDB`) to show majors that have more than 5,000 students at both undergraduate and graduate levels, and it orders the results by the total number of students in descending order.
+# Installation
 
-`SELECT` statement Part1 (**Undergraduate data**):
+## Prerequisites
 
--Retrieves the Major, assigns the string `'Undergrad'` to the Degree_Level, and selects the total number of undergraduate students (Total) from the `RecentGradsDB` table.
+### Python:
+- **Python 3.10 or above**
+- **pip** for installing Python dependencies
 
--**Filters** (`WHERE Total > 5000`) to include only majors with more than 5,000 undergraduate students.
+### Rust:
+- Install Rust using [Rustup](https://rustup.rs/).
 
-`SELECT` statement Part2 (Graduate data):
+### Devcontainer (optional):
+- Use **VSCode** and **Docker** to set up a development container for a seamless environment.
 
--Retrieves the Major, assigns the string `'Graduate'` to the Degree_Level, and selects the total number of graduate students (Grad_total) from the `GradStudentsDB` table.
+## Install dependencies:
 
--**Filters** (`WHERE Grad_total > 5000`) to include only majors with more than 5,000 graduate students.
+```
+pip install -r requirements.txt
+```
+## Run the Python script:
 
-`UNION` operator:
-
-Combines the results from the two SELECT statements, ensuring that any duplicates are removed. 
-
-`ORDER BY` Total_Students DESC:
-
-Orders the combined result set by the total number of students (Total_Students) in descending order, showing majors with the highest total first.
-
-### Expected output:
-
-The output consists of a combined and sorted list of majors that have more than 5,000 students, with each entry labeled according to the degree level. The majors are ordered by the total number of students, showing those with the highest student counts first.
-
-![SQL_query2_output](SQL_query2_output.PNG)
-
-## Testing
-run below command to test the script
-```python
-pytest test_main.py
+```
+python main.py
 ```
 
-## References 
-1. https://github.com/nogibjj/sqlite-lab
-2. https://learn.microsoft.com/en-us/azure/databricks/dev-tools/python-sql-connector
+## Run Python tests:
+
+```
+python -m unittest test_main.py
+```
+### Rust Setup:
+
+## Build the Rust project:
+
+```
+cargo build --release
+```
+## Run the Rust program:
+
+```
+cargo run --release
+```
+## Run Rust tests:
+
+```
+cargo test
+```
+# Data Processing Workflow
+
+## Input
+
+- **Dataset**: `data/Customer Purchasing Behaviors.csv`
+- **Columns**:
+  - `user_id`: Unique customer identifier.
+  - `age`: Age of the customer.
+  - `annual_income`: Annual income of the customer.
+  - `purchase_amount`: Total purchase amount.
+  - `loyalty_score`: Loyalty score assigned to the customer.
+  - `region`: Geographical region of the customer.
+  - `purchase_frequency`: Number of purchases made.
+
+---
+
+## Processing
+
+### 1. Filter Customers:
+- `purchase_amount > 400`
+- `loyalty_score > 7`
+
+### 2. Calculate Metrics:
+- **Total and average annual income**
+- **Total and average purchase frequency**
+
+### 3. Add Column:
+- **`high_value_customer`**: Customers with `purchase_amount > 500`
+
+---
+
+## Output
+
+### Filtered Data:
+- **Python**: `data/Python_Filtered_Customers.csv`
+- **Rust**: `data/Rust_Filtered_Customers.csv`
+
+### Performance Reports:
+- **Python**: `Python_Performance.md`
+- **Rust**: `Rust_Performance.md`
+
+# Performance Comparison: Python vs. Rust
+
+## Metrics Overview
+
+| **Metric**           | **Python**  | **Rust**     | **Improvement**    |
+|-----------------------|-------------|--------------|--------------------|
+| Execution Time        | 5.60 seconds | 7.41 ms      | ~756x faster       |
+| Memory Usage          | 106.89 MB    | 19.68 MB     | ~5.4x better       |
+| Initial CPU Usage     | N/A          | 8.80%        | N/A                |
+| Final CPU Usage       | N/A          | 3.70%        | N/A                |
+
+---
+
+## Insights
+
+- **Execution Time**: Rust is significantly faster due to its low-level memory management and lack of runtime overhead.
+- **Memory Usage**: Rust is more efficient, reducing memory consumption by ~5.4x.
+- **CPU Utilization**: Rust tracks CPU usage during the execution, providing better insight into resource usage.
+
+---
+
+### **Performance Analysis**
+
+#### **1. Execution Time**
+- **Python**: Took **5.60 seconds**, slowed by interpreter overhead, pandas processing, and garbage collection.
+- **Rust**: Took **7.41 milliseconds**, benefiting from compiled execution and Polars' efficient memory handling.
+- **Improvement**: Rust is **~756x faster** due to its compiled nature and optimized libraries.
+
+#### **2. Memory Usage**
+- **Python**: Used **106.89 MB**, driven by pandas' metadata and Python's dynamic typing overhead.
+- **Rust**: Used **19.68 MB**, leveraging Polars' lightweight columnar format and Rust's memory efficiency.
+- **Improvement**: Rust uses **~5.4x less memory**, making it better for resource-constrained environments.
+
+#### **3. CPU Utilization**
+- **Rust Initial CPU Usage**: **8.80%**; **Final CPU Usage**: **3.70%**.
+- Rust's compiled optimizations and lightweight libraries ensure efficient CPU usage.
+- Python’s CPU usage, while not directly measured, is likely higher due to interpreter overhead.
+
+
+
+#### **Why Rust Performs Better**
+- **Compiled vs. Interpreted**: Rust is compiled to machine code, while Python relies on runtime interpretation.
+- **Memory Management**: Rust's manual memory handling avoids the garbage collection overhead present in Python.
+- **Optimized Libraries**: Polars in Rust is built on Apache Arrow, designed for performance, unlike pandas, which adds abstraction overhead.
+
+## CI/CD Pipelines
+
+### Python Workflow (`python_cicd.yml`)
+- **Linting**: Ensures code quality with `pylint` and `black`.
+- **Testing**: Runs `unittest` with `pytest`.
+
+### Rust Workflow (`rust_cicd.yml`)
+- **Build**: Compiles the Rust code.
+- **Testing**: Executes Rust tests using `cargo test`.
+
+## Conclusion
+
+This project demonstrates that Rust outperforms Python in terms of:
+
+- **Speed**: Rust executes **756x faster**.
+- **Memory Usage**: Rust consumes **5.4x less memory**.
+
+However, the choice of language depends on the use case:
+
+- **Python**: Remains the go-to language for data science and prototyping due to its simplicity and extensive libraries.
+- **Rust**: Is better suited for performance-intensive applications, offering speed and memory efficiency.
+
+By understanding these trade-offs, developers can choose the right tool for their specific requirements.
+
+## References
+* https://github.com/nogibjj/rust-data-engineering
+
